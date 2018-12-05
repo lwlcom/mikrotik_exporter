@@ -2,7 +2,6 @@ package interfaces
 
 import (
 	"regexp"
-	"strings"
 
 	"github.com/lwlcom/mikrotik_exporter/util"
 )
@@ -20,7 +19,7 @@ func (c *interfaceCollector) Parse(output string) ([]Interface, error) {
 	for _, data := range interfaces {
 		if match := ethernetRegexp.FindStringSubmatch(data); match != nil {
 			item := Interface{
-				Comment:  strings.TrimSuffix(match[2], "\r"),
+				Comment:  util.Normalize(match[2]),
 				Name:     match[3],
 				RxByte:   util.Str2float64(match[4]),
 				TxByte:   util.Str2float64(match[5]),
