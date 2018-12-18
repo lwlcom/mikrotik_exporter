@@ -1,8 +1,6 @@
 package optics
 
 import (
-	"strings"
-
 	"github.com/lwlcom/mikrotik_exporter/collector"
 	"github.com/lwlcom/mikrotik_exporter/rpc"
 	"github.com/prometheus/client_golang/prometheus"
@@ -47,9 +45,6 @@ func (c *opticsCollector) Collect(client *rpc.Client, ch chan<- prometheus.Metri
 		return err
 	}
 	for _, sfp := range sfps {
-		if !strings.HasPrefix(sfp, "sfp") {
-			continue
-		}
 		out, err := client.RunCommand("/interface ethernet monitor " + sfp + " once")
 		if err != nil {
 			return err
