@@ -11,6 +11,7 @@ import (
 	"github.com/lwlcom/mikrotik_exporter/interfaces"
 	"github.com/lwlcom/mikrotik_exporter/optics"
 	"github.com/lwlcom/mikrotik_exporter/rpc"
+	"github.com/lwlcom/mikrotik_exporter/system"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 )
@@ -46,6 +47,10 @@ func collectors() map[string]collector.RPCCollector {
 
 	if f.Optics {
 		m["optics"] = optics.NewCollector()
+	}
+
+	if f.System {
+		m["system"] = system.NewCollector()
 	}
 
 	return m

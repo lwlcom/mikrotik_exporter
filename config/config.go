@@ -12,6 +12,7 @@ type Config struct {
 	Targets  []Target `yaml:"targets"`
 	Features struct {
 		Optics bool `yaml:"optics,omitempty"`
+		System bool `yaml:"system,omitempty"`
 	} `yaml:"features"`
 }
 
