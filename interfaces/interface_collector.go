@@ -17,6 +17,9 @@ var (
 	transmitPacketsDesc *prometheus.Desc
 	transmitErrorsDesc  *prometheus.Desc
 	transmitDropsDesc   *prometheus.Desc
+	adminStatusDesc     *prometheus.Desc
+	operStatusDesc      *prometheus.Desc
+	errorStatusDesc     *prometheus.Desc
 )
 
 func init() {
@@ -29,6 +32,10 @@ func init() {
 	transmitPacketsDesc = prometheus.NewDesc(prefix+"transmit_packets_total", "Transmitted data in bytes", l, nil)
 	transmitErrorsDesc = prometheus.NewDesc(prefix+"transmit_errors", "Number of errors caused by outgoing packets", l, nil)
 	transmitDropsDesc = prometheus.NewDesc(prefix+"transmit_drops", "Number of dropped outgoing packets", l, nil)
+	adminStatusDesc = prometheus.NewDesc(prefix+"admin_up", "Admin operational status", l, nil)
+	operStatusDesc = prometheus.NewDesc(prefix+"up", "Interface operational status", l, nil)
+	errorStatusDesc = prometheus.NewDesc(prefix+"error_status", "Admin and operational status differ", l, nil)
+
 }
 
 // Collector collects interface metrics
@@ -50,6 +57,9 @@ func (*interfaceCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- transmitPacketsDesc
 	ch <- transmitErrorsDesc
 	ch <- transmitDropsDesc
+	ch <- adminStatusDesc
+	ch <- operStatusDesc
+	ch <- errorStatusDesc
 }
 
 // Collect collects metrics from mikrotik
@@ -63,6 +73,10 @@ func (c *interfaceCollector) Collect(client *rpc.Client, ch chan<- prometheus.Me
 	for _, item := range items {
 		l := append(labelValues, item.Name, item.Comment)
 
+		errorStatus := 0
+		if item.AdminStatus != item.OperStatus {
+			errorStatus = 1
+		}
 		ch <- prometheus.MustNewConstMetric(receiveBytesDesc, prometheus.GaugeValue, item.RxByte, l...)
 		ch <- prometheus.MustNewConstMetric(receivePacketsDesc, prometheus.GaugeValue, item.TxPacket, l...)
 		ch <- prometheus.MustNewConstMetric(receiveErrorsDesc, prometheus.GaugeValue, item.RxError, l...)
@@ -71,6 +85,9 @@ func (c *interfaceCollector) Collect(client *rpc.Client, ch chan<- prometheus.Me
 		ch <- prometheus.MustNewConstMetric(transmitPacketsDesc, prometheus.GaugeValue, item.TxPacket, l...)
 		ch <- prometheus.MustNewConstMetric(transmitErrorsDesc, prometheus.GaugeValue, item.TxError, l...)
 		ch <- prometheus.MustNewConstMetric(transmitDropsDesc, prometheus.GaugeValue, item.TxDrop, l...)
+		ch <- prometheus.MustNewConstMetric(adminStatusDesc, prometheus.GaugeValue, item.AdminStatus, l...)
+		ch <- prometheus.MustNewConstMetric(operStatusDesc, prometheus.GaugeValue, item.OperStatus, l...)
+		ch <- prometheus.MustNewConstMetric(errorStatusDesc, prometheus.GaugeValue, float64(errorStatus), l...)
 	}
 
 	return nil
