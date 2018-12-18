@@ -20,7 +20,7 @@ var (
 	showVersion   = flag.Bool("version", false, "Print version information.")
 	listenAddress = flag.String("web.listen-address", ":9436", "Address on which to expose metrics and web interface.")
 	metricsPath   = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
-	configFile    = flag.String("config-file", "", "Path to config file")
+	configFile    = flag.String("config-file", "config.yml", "Path to config file")
 	debug         = flag.Bool("debug", false, "Show verbose debug output in log")
 	cfg           *config.Config
 )
