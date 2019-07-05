@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -9,24 +10,25 @@ import (
 
 func uptimeToSeconds(time string) float64 {
 	seconds := 0
-	units := map[string]int{
+	scale := map[string]int{
 		"w": 604800,
 		"d": 86400,
 		"h": 3600,
 		"m": 60,
 		"s": 1,
 	}
-
-	for unit, v := range units {
+	units := []string{"w", "d", "h", "m", "s"}
+	for _, unit := range units {
 		s := strings.Split(time, unit)
 		if len(s) == 1 {
 			continue
 		}
 		i, err := strconv.Atoi(s[0])
 		if err != nil {
+			fmt.Println(err)
 			return 0
 		}
-		seconds = seconds + (i * v)
+		seconds = seconds + (i * scale[unit])
 		time = s[1]
 	}
 	return float64(seconds)
