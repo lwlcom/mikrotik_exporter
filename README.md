@@ -20,7 +20,7 @@ features:
 Name     | Description | Default
 ---------|-------------|---------
 version | Print version information. |
-web.listen-address | Address on which to expose metrics and web interface. | :9362
+web.listen-address | Address on which to expose metrics and web interface. | :9436
 web.telemetry-path | Path under which to expose metrics. | /metrics
 config-file | Path to config file |
 debug | Show verbose debug output | false
