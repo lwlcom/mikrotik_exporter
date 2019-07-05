@@ -13,6 +13,7 @@ type Config struct {
 	Features struct {
 		Optics bool `yaml:"optics,omitempty"`
 		System bool `yaml:"system,omitempty"`
+		Dhcp   bool `yaml:"dhcp,omitempty"`
 	} `yaml:"features"`
 }
 

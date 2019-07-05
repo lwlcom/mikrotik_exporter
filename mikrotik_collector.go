@@ -8,6 +8,7 @@ import (
 	"github.com/lwlcom/mikrotik_exporter/collector"
 	"github.com/lwlcom/mikrotik_exporter/config"
 	"github.com/lwlcom/mikrotik_exporter/connector"
+	"github.com/lwlcom/mikrotik_exporter/dhcp"
 	"github.com/lwlcom/mikrotik_exporter/interfaces"
 	"github.com/lwlcom/mikrotik_exporter/optics"
 	"github.com/lwlcom/mikrotik_exporter/rpc"
@@ -51,6 +52,10 @@ func collectors() map[string]collector.RPCCollector {
 
 	if f.System {
 		m["system"] = system.NewCollector()
+	}
+
+	if f.Dhcp {
+		m["dhcp"] = dhcp.NewCollector()
 	}
 
 	return m

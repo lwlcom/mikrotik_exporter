@@ -12,6 +12,7 @@ targets:
 features:
   optics: false
   system: false
+  dhcp: false
 ```
 
 # flags
