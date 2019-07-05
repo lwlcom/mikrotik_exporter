@@ -13,6 +13,7 @@ features:
   optics: false
   system: false
   dhcp: false
+  ospf: false
 ```
 
 # flags

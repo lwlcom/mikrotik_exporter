@@ -11,6 +11,7 @@ import (
 	"github.com/lwlcom/mikrotik_exporter/dhcp"
 	"github.com/lwlcom/mikrotik_exporter/interfaces"
 	"github.com/lwlcom/mikrotik_exporter/optics"
+	"github.com/lwlcom/mikrotik_exporter/ospf"
 	"github.com/lwlcom/mikrotik_exporter/rpc"
 	"github.com/lwlcom/mikrotik_exporter/system"
 	"github.com/prometheus/client_golang/prometheus"
@@ -56,6 +57,10 @@ func collectors() map[string]collector.RPCCollector {
 
 	if f.Dhcp {
 		m["dhcp"] = dhcp.NewCollector()
+	}
+
+	if f.Ospf {
+		m["ospf"] = ospf.NewCollector()
 	}
 
 	return m
