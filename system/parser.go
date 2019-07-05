@@ -10,6 +10,7 @@ import (
 func uptimeToSeconds(time string) float64 {
 	seconds := 0
 	units := map[string]int{
+		"w": 604800,
 		"d": 86400,
 		"h": 3600,
 		"m": 60,
