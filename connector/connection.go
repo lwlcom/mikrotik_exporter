@@ -18,24 +18,6 @@ var (
 	lock         = &sync.Mutex{}
 )
 
-func config(user, pass string) (*ssh.ClientConfig, error) {
-	lock.Lock()
-	defer lock.Unlock()
-
-	if cachedConfig != nil {
-		return cachedConfig, nil
-	}
-
-	cachedConfig = &ssh.ClientConfig{
-		User:            user,
-		Auth:            []ssh.AuthMethod{ssh.Password(pass)},
-		Timeout:         timeoutInSeconds * time.Second,
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-	}
-
-	return cachedConfig, nil
-}
-
 // NewSSSHConnection connects to device
 func NewSSSHConnection(host, user, pass string) (*SSHConnection, error) {
 	if !strings.Contains(host, ":") {
@@ -59,11 +41,13 @@ type SSHConnection struct {
 
 // Connect connects to the device
 func (c *SSHConnection) Connect(user, pass string) error {
-	config, err := config(user, pass)
-	if err != nil {
-		return err
+	config := &ssh.ClientConfig{
+		User:            user,
+		Auth:            []ssh.AuthMethod{ssh.Password(pass)},
+		Timeout:         timeoutInSeconds * time.Second,
+		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
-
+	var err error
 	c.conn, err = ssh.Dial("tcp", c.Host, config)
 	return err
 }
