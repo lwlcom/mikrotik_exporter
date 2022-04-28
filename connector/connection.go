@@ -47,6 +47,9 @@ func (c *SSHConnection) Connect(user, pass string) error {
 		Timeout:         timeoutInSeconds * time.Second,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
+	config.KeyExchanges = []string{
+		"diffie-hellman-group-exchange-sha256"}
+
 	var err error
 	c.conn, err = ssh.Dial("tcp", c.Host, config)
 	return err
