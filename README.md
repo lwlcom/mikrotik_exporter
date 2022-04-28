@@ -7,7 +7,9 @@ targets:
   - name: router1510
     address: 192.168.0.1
     user: prom
-    password: topsecret
+    password: topsecret                # if you want password auth
+
+identity: /home/username/.ssh/id_rsa   # if you want pubkey auth
 
 features:
   optics: false
@@ -15,6 +17,16 @@ features:
   dhcp: false
   ospf: false
 ```
+
+The global setting `identity` points to a SSH private key used for
+public key authentication.
+You have to use an absolute or relative path; you can not use a path
+relative to $HOME starting with tilde (`~/...`).
+
+If both `identity` is set globally and `password` is set for a given
+target, both authentication methods are tried, starting with pubkey
+auth.
+
 
 # flags
 Name     | Description | Default

@@ -9,6 +9,7 @@ import (
 	"os"
 
 	"github.com/lwlcom/mikrotik_exporter/config"
+	"github.com/lwlcom/mikrotik_exporter/connector"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
@@ -46,6 +47,13 @@ func main() {
 		log.Fatalf("could not load config file. %v", err)
 	}
 	cfg = c
+
+	if cfg.Identity != "" {
+		err = connector.ReadIdentity(cfg.Identity)
+		if err != nil {
+			log.Fatalf("could not load identity file. %v", err)
+		}
+	}
 
 	startServer()
 }

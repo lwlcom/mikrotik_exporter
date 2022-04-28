@@ -2,6 +2,7 @@ package connector
 
 import (
 	"bytes"
+	"os"
 	"strings"
 
 	"sync"
@@ -16,7 +17,23 @@ const timeoutInSeconds = 5
 var (
 	cachedConfig *ssh.ClientConfig
 	lock         = &sync.Mutex{}
+	identity ssh.AuthMethod
 )
+
+func ReadIdentity(filename string) error {
+	key, err := os.ReadFile(filename)
+	if err != nil {
+		return err
+	}
+
+	signer, err := ssh.ParsePrivateKey(key)
+	if err != nil {
+		return err
+	}
+
+	identity = ssh.PublicKeys(signer)
+	return nil
+}
 
 // NewSSSHConnection connects to device
 func NewSSSHConnection(host, user, pass string) (*SSHConnection, error) {
@@ -43,10 +60,17 @@ type SSHConnection struct {
 func (c *SSHConnection) Connect(user, pass string) error {
 	config := &ssh.ClientConfig{
 		User:            user,
-		Auth:            []ssh.AuthMethod{ssh.Password(pass)},
 		Timeout:         timeoutInSeconds * time.Second,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
+
+	if identity != nil {
+		config.Auth = append(config.Auth, identity)
+	}
+	if pass != "" {
+		config.Auth = append(config.Auth, ssh.Password(pass))
+	}
+
 	var err error
 	c.conn, err = ssh.Dial("tcp", c.Host, config)
 	return err
