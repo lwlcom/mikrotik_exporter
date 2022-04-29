@@ -10,6 +10,7 @@ import (
 // Config represents the configuration for the exporter
 type Config struct {
 	Targets  []Target `yaml:"targets"`
+	Identity string   `yaml:"identity,omitempty"`
 	Features struct {
 		Optics bool `yaml:"optics,omitempty"`
 		System bool `yaml:"system,omitempty"`
