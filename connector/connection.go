@@ -63,6 +63,8 @@ func (c *SSHConnection) Connect(user, pass string) error {
 		Timeout:         timeoutInSeconds * time.Second,
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
+	config.KeyExchanges = []string{
+		"diffie-hellman-group-exchange-sha256"}
 
 	if identity != nil {
 		config.Auth = append(config.Auth, identity)
