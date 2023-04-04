@@ -47,8 +47,8 @@ func collectors() map[string]collector.RPCCollector {
 
 	f := &cfg.Features
 
-	if f.Optics {
-		m["optics"] = optics.NewCollector()
+	if f.Optics || f.OpticsWithNoLink {
+		m["optics"] = optics.NewCollector(f.OpticsWithNoLink)
 	}
 
 	if f.System {

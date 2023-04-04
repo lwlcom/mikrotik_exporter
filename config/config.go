@@ -13,6 +13,7 @@ type Config struct {
 	Identity string   `yaml:"identity,omitempty"`
 	Features struct {
 		Optics bool `yaml:"optics,omitempty"`
+		OpticsWithNoLink bool `yaml:"opticsWithNoLink,omitempty"`
 		System bool `yaml:"system,omitempty"`
 		Dhcp   bool `yaml:"dhcp,omitempty"`
 		Ospf   bool `yaml:"ospf,omitempty"`
