@@ -13,6 +13,7 @@ identity: /home/username/.ssh/id_rsa   # if you want pubkey auth
 
 features:
   optics: false
+  opticsWithNoLink: false
   system: false
   dhcp: false
   ospf: false

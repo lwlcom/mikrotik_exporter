@@ -21,11 +21,12 @@ func init() {
 
 // Collector collects interface metrics
 type opticsCollector struct {
+       monitorOpticsWithNoLink	bool
 }
 
 // NewCollector creates a new collector
-func NewCollector() collector.RPCCollector {
-	return &opticsCollector{}
+func NewCollector(monitorOpticsWithNoLink bool) collector.RPCCollector {
+	return &opticsCollector{monitorOpticsWithNoLink}
 }
 
 // Describe describes the metrics

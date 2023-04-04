@@ -4,7 +4,6 @@ import (
 	"errors"
 	"regexp"
 	"strings"
-
 	"github.com/lwlcom/mikrotik_exporter/util"
 )
 
@@ -22,10 +21,14 @@ func (c *opticsCollector) ParseInterfaces(output string) ([]string, error) {
 
 // ParseSfp parses cli output and tries to find optical power data
 func (c *opticsCollector) ParseSfp(output string) (Optic, error) {
-	noLinkRegexp := regexp.MustCompile(`status: no-link`)
-	if noLinkRegexp.MatchString(output) {
-		return Optic{}, errors.New("no-link")
+
+	if c.monitorOpticsWithNoLink == false {
+		noLinkRegexp := regexp.MustCompile(`status: no-link`)
+		if noLinkRegexp.MatchString(output) {
+			return Optic{}, errors.New("no-link")
+		}
 	}
+
 	if !strings.Contains(output, "sfp") {
 		return Optic{}, errors.New("not an sfp port")
 	}
